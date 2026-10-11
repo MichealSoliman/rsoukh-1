@@ -1,0 +1,44 @@
+<?php
+/**
+ * ==========================================================================
+ * ملف إعدادات البريد الإلكتروني - رسوخ العمرانية
+ * Rosookh Al Omraniyah - Email & Server Configuration
+ * ==========================================================================
+ */
+
+return [
+    /**
+     * 1. عنوان البريد الإلكتروني المستلم (هام جداً):
+     * أدخل البريد الإلكتروني الذي ترغب في استقبال طلبات التسجيل عليه.
+     * مثال: 'info@rosookh.com' أو 'yourname@gmail.com'
+     */
+    'recipient_email' => 'rsoukh.rs@gmail.com',
+    'web3forms_key'   => '113beeb3-a879-4915-b15e-03afe048cd3b',
+
+    /**
+     * 2. طريقة الإرسال:
+     * - 'mail': استخدام دالة mail() الافتراضية في خادم الاستضافة (الأنسب لمعظم استضافات cPanel/Apache).
+     * - 'smtp': استخدام خادم SMTP مباشر (يوفر وصولاً موثوقاً لصندوق الوارد، مناسب لـ Gmail, Zoho, Hostinger, Outlook).
+     */
+    'mailer_type' => 'mail',
+
+    /**
+     * 3. إعدادات SMTP (تُستخدم فقط إذا تم اختيار 'mailer_type' => 'smtp' أعلاه):
+     */
+    'smtp' => [
+        'host'       => 'smtp.example.com', // خادم SMTP
+        'port'       => 465,                // 465 لـ SSL أو 587 لـ TLS
+        'username'   => 'your-email@example.com',
+        'password'   => 'your-password-or-app-key',
+        'encryption' => 'ssl',              // 'ssl' أو 'tls'
+        'timeout'    => 15,
+    ],
+
+    /**
+     * 4. تفاصيل الرسالة الافتراضية:
+     */
+    'from_name'     => 'رسوخ العمرانية - نظام تسجيل العملاء',
+    'from_email'    => '', // اتركه فارغاً ليتم استخدام noreply@ اسم النطاق تلقائياً، أو حدد بريد نطاقك
+    'email_subject' => 'تسجيل بيانات عميل جديد - رسوخ العمرانية',
+    'timezone'      => 'Asia/Riyadh',
+];

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رسوخ العمرانية | تسجيل بيانات العملاء</title>
+  <meta name="description" content="صفحة تسجيل بيانات العملاء لشركة رسوخ العمرانية. نسعد بخدمتكم، يرجى تعبئة البيانات المطلوبة.">
+  <meta name="theme-color" content="#061626">
+
+  <!-- الخط العربي Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ملف التنسيق -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="page-container" role="main">
+    
+    <!-- رأس الصفحة: الشعار واسم الشركة -->
+    <header class="brand-header">
+      <div class="brand-emblem" aria-hidden="true">
+        <!-- أيقونة معمارية هندسية تعكس الرسوخ والعمران -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18" />
+          <path d="M5 21V7l7-4 7 4v14" />
+          <path d="M9 10h1" />
+          <path d="M9 14h1" />
+          <path d="M9 18h1" />
+          <path d="M14 10h1" />
+          <path d="M14 14h1" />
+          <path d="M14 18h1" />
+        </svg>
+      </div>
+      <h1 class="brand-name">رسوخ العمرانية</h1>
+      <p class="brand-subtitle">نسعد بخدمتكم، يرجى تعبئة البيانات التالية.</p>
+    </header>
+
+    <!-- بطاقة النموذج -->
+    <section class="form-card" aria-labelledby="formHeading">
+      
+      <!-- نموذج التسجيل -->
+      <form id="customerForm" novalidate autocomplete="on">
+        
+        <div class="form-title-group">
+          <h2 id="formHeading" class="form-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <line x1="19" y1="8" x2="19" y2="14" />
+              <line x1="22" y1="11" x2="16" y2="11" />
+            </svg>
+            تسجيل بيانات العميل
+          </h2>
+          <p class="form-desc">يرجى إدخال بياناتك واختيار طريقة الدفع المناسبة.</p>
+        </div>
+
+        <!-- رسالة التنبيه العامة عند حدوث خطأ في الإرسال -->
+        <div id="generalAlert" class="status-alert error" role="alert" aria-live="polite">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <span id="alertMessage">تعذر إرسال البيانات حاليًا، يرجى المحاولة مرة أخرى.</span>
+        </div>
+
+        <!-- حقل الأمان الخفي لمكافحة الرسائل المزعجة (Honeypot) -->
+        <div class="hidden-security-field" aria-hidden="true">
+          <label for="website_url_check">اترك هذا الحقل فارغاً</label>
+          <input type="text" id="website_url_check" name="website_url_check" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- الحقل الأول: الاسم الكامل -->
+        <div class="form-group" id="groupFullName">
+          <label for="fullName" class="form-label">
+            الاسم الكامل
+            <span class="required-mark" aria-hidden="true">*</span>
+          </label>
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="fullName" 
+              name="fullName" 
+              class="form-control" 
+              placeholder="أدخل اسمك الكامل"
+              required 
+              autocomplete="name"
+              aria-describedby="fullNameError"
+            >
+            <div class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+          </div>
+          <div id="fullNameError" class="error-message" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span class="error-text">هذا الحقل مطلوب.</span>
+          </div>
+        </div>
+
+        <!-- الحقل الثاني: رقم الجوال -->
+        <div class="form-group" id="groupPhone">
+          <label for="phoneNumber" class="form-label">
+            رقم الجوال
+            <span class="required-mark" aria-hidden="true">*</span>
+          </label>
+          <div class="input-wrapper">
+            <input 
+              type="tel" 
+              id="phoneNumber" 
+              name="phoneNumber" 
+              class="form-control" 
+              placeholder="أدخل رقم الجوال"
+              required 
+              dir="ltr"
+              autocomplete="tel"
+              aria-describedby="phoneError"
+            >
+            <div class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+            </div>
+          </div>
+          <div id="phoneError" class="error-message" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span class="error-text">هذا الحقل مطلوب.</span>
+          </div>
+        </div>
+
+        <!-- الحقل الثالث: طريقة الدفع -->
+        <div class="form-group" id="groupPayment">
+          <label for="paymentMethod" class="form-label">
+            طريقة الدفع
+            <span class="required-mark" aria-hidden="true">*</span>
+          </label>
+          <div class="input-wrapper select-wrapper">
+            <select 
+              id="paymentMethod" 
+              name="paymentMethod" 
+              class="form-control" 
+              required
+              aria-describedby="paymentError"
+            >
+              <option value="" disabled selected>اختر طريقة الدفع</option>
+              <option value="كاش (نقدًا)">كاش (نقدًا)</option>
+              <option value="تحويل بنكي">تحويل بنكي</option>
+            </select>
+            <div class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+            </div>
+            <div class="select-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </div>
+          </div>
+          <div id="paymentError" class="error-message" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span class="error-text">هذا الحقل مطلوب.</span>
+          </div>
+        </div>
+
+        <!-- زر إرسال البيانات -->
+        <button type="submit" id="submitBtn" class="submit-btn">
+          <span class="btn-spinner" aria-hidden="true"></span>
+          <span class="btn-text">إرسال البيانات</span>
+        </button>
+
+      </form>
+
+      <!-- شاشة النجاح والتأكيد (تظهر بعد نجاح الإرسال وتأكيده) -->
+      <div id="successScreen" class="success-screen" role="region" aria-live="polite">
+        <div class="success-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <h3 class="success-title">تم إرسال بياناتك بنجاح</h3>
+        <p class="success-desc">تم إرسال بياناتك بنجاح، شكرًا لتواصلك مع رسوخ العمرانية.</p>
+        <button type="button" id="newSubmissionBtn" class="reset-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          تسجيل عميل جديد
+        </button>
+      </div>
+
+    </section>
+
+    <!-- تذييل الصفحة -->
+    <footer class="page-footer">
+      <p>&copy; جميع الحقوق محفوظة لشركة رسوخ العمرانية</p>
+    </footer>
+
+  </main>
+
+  <!-- ملف المنطق البرمجي -->
+  <script src="script.js"></script>
+</body>
+</html>
