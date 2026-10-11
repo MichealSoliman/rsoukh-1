@@ -12,8 +12,8 @@ return [
      * أدخل البريد الإلكتروني الذي ترغب في استقبال طلبات التسجيل عليه.
      * مثال: 'info@rosookh.com' أو 'yourname@gmail.com'
      */
-    'recipient_email' => 'rswkhalmranyt@gmail.com',
-    'web3forms_key'   => '88af864b-908a-4bc9-b362-860d522e4a40',
+    'recipient_email' => 'sltanbnnasr346@gmail.com',
+    'web3forms_key'   => '274c7999-8af6-4943-acd9-3c5cdfedac60',
 
     /**
      * 2. طريقة الإرسال:
