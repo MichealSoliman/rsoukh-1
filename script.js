@@ -1,6 +1,6 @@
 /**
- * رسوخ العمرانية - منطق صفحة تسجيل بيانات العملاء
- * Client Registration Form Handler
+ * رسوخ العمرانية - منطق صفحة إتمام عملية الشراء
+ * Purchase Completion Form Handler
  */
 
 // إعدادات خدمة الإرسال
@@ -43,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const phoneError = document.getElementById('phoneError');
   const cityError = document.getElementById('cityError');
   const paymentError = document.getElementById('paymentError');
+
+  // نص الزر الافتراضي
+  const defaultBtnText = 'إرسال بيانات إتمام الشراء';
 
   // حالة الإرسال لمنع النقر المتكرر
   let isSubmitting = false;
@@ -91,6 +94,40 @@ document.addEventListener('DOMContentLoaded', () => {
   hideGeneralAlert();
 
   /**
+   * استخراج وتنسيق رقم الجوال السعودي فقط
+   * يقبل: 05xxxxxxxx أو 5xxxxxxxx أو +9665xxxxxxxx أو 009665xxxxxxxx
+   */
+  function parseSaudiPhone(rawPhone) {
+    if (!rawPhone) return null;
+    let clean = rawPhone.replace(/[\s\-\(\)\+]/g, '');
+
+    // إزالة البادئات الدولية
+    if (clean.startsWith('00966')) {
+      clean = clean.substring(5);
+    } else if (clean.startsWith('966')) {
+      clean = clean.substring(3);
+    }
+
+    // إزالة صفر البداية في حال إدخال 05xxxxxxxx
+    if (clean.startsWith('05')) {
+      clean = clean.substring(1);
+    }
+
+    // يجب أن يبدأ بـ 5 ويكون 9 أرقام (5xxxxxxxx)
+    if (/^5[0-9]{8}$/.test(clean)) {
+      return {
+        isValid: true,
+        digits: clean,
+        localFormatted: '0' + clean,
+        international: '+966' + clean,
+        display: '+966 ' + clean.substring(0, 1) + clean.substring(1, 3) + ' ' + clean.substring(3, 6) + ' ' + clean.substring(6)
+      };
+    }
+
+    return { isValid: false };
+  }
+
+  /**
    * التحقق من صحة الاسم الكامل
    */
   function validateFullName() {
@@ -108,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * التحقق من صحة رقم الجوال
+   * التحقق من أن رقم الجوال سعودي فقط
    */
   function validatePhone() {
     const rawVal = phoneInput.value.trim();
@@ -117,15 +154,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
 
-    const cleanNumber = rawVal.replace(/[\s\-\(\)]/g, '');
-    const saudiRegex = /^(05|5|\+9665|009665|9665)[0-9]{8}$/;
-    const intlRegex = /^(\+?[0-9]{8,15})$/;
-
-    if (saudiRegex.test(cleanNumber) || intlRegex.test(cleanNumber)) {
+    const saudi = parseSaudiPhone(rawVal);
+    if (saudi && saudi.isValid) {
       clearError(groupPhone, phoneError);
       return true;
     } else {
-      showError(groupPhone, phoneError, 'يرجى إدخال رقم جوال صحيح.');
+      showError(groupPhone, phoneError, 'يرجى إدخال رقم جوال سعودي صحيح يبدأ بـ 05 (مثال: 05xxxxxxxx).');
       return false;
     }
   }
@@ -210,6 +244,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // تجهيز رقم الجوال بالكود السعودي الدولي
+    const saudiInfo = parseSaudiPhone(phoneInput.value.trim());
+    const saudiPhoneInternational = saudiInfo ? saudiInfo.international : phoneInput.value.trim();
+
     // تفعيل حالة التحميل
     isSubmitting = true;
     submitBtn.disabled = true;
@@ -217,7 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btnText.textContent = 'جارٍ إرسال البيانات...';
 
     const fullName = fullNameInput.value.trim();
-    const phoneNumber = phoneInput.value.trim();
     const cityName = cityInput.value.trim();
     const paymentMethod = paymentSelect.value;
 
@@ -239,18 +276,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const payload = {
           access_key: CONFIG.web3formsKey,
-          subject: 'تسجيل عميل جديد: ' + fullName + ' (' + cityName + ') - ' + CONFIG.companyName,
+          subject: 'طلب إتمام عملية الشراء: ' + fullName + ' (' + cityName + ') - ' + CONFIG.companyName,
           from_name: CONFIG.companyName,
           message: [
-            'بيانات تسجيل العميل الجديد:',
+            'بيانات طلب إتمام عملية الشراء:',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
             '• اسم العميل: ' + fullName,
-            '• رقم الجوال: ' + phoneNumber,
+            '• رقم الجوال السعودي: ' + saudiPhoneInternational,
             '• المدينة: ' + cityName,
             '• طريقة الدفع: ' + paymentMethod,
             '• اسم الشركة: ' + CONFIG.companyName,
-            '• تاريخ ووقت الإرسال: ' + formattedDate,
-            '• مصدر التسجيل: صفحة تسجيل بيانات العملاء',
+            '• تاريخ ووقت الطلب: ' + formattedDate,
+            '• نوع الطلب: إتمام عملية الشراء',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
           ].join('\n')
         };
@@ -278,9 +315,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. استخدام معالج الخادم PHP كبديل
         const payload = {
           full_name: fullName,
-          phone_number: phoneNumber,
+          phone_number: saudiPhoneInternational,
           city: cityName,
           payment_method: paymentMethod,
+          request_type: 'إتمام عملية الشراء',
           website_url_check: honeypotInput ? honeypotInput.value : ''
         };
 
@@ -318,12 +356,12 @@ document.addEventListener('DOMContentLoaded', () => {
       isSubmitting = false;
       submitBtn.disabled = false;
       submitBtn.classList.remove('loading');
-      btnText.textContent = 'إرسال البيانات';
+      btnText.textContent = defaultBtnText;
     }
   });
 
   /**
-   * زر تسجيل عميل جديد (إعادة فتح النموذج)
+   * زر تسجيل طلب شراء جديد (إعادة فتح النموذج)
    */
   newSubmissionBtn.addEventListener('click', () => {
     hideGeneralAlert();

@@ -74,13 +74,24 @@ if (empty($fullName)) {
     $errors['full_name'] = 'يرجى إدخال اسم صحيح مكون من 3 أحرف على الأقل.';
 }
 
-// 3. التحقق من رقم الجوال
+// 3. التحقق من رقم الجوال السعودي حصراً وتنسيقه
 if (empty($phoneNumber)) {
     $errors['phone_number'] = 'رقم الجوال مطلوب.';
 } else {
-    $cleanPhone = preg_replace('/[\s\-\(\)]/', '', $phoneNumber);
-    if (!preg_match('/^(\+?[0-9]{8,15})$/', $cleanPhone)) {
-        $errors['phone_number'] = 'يرجى إدخال رقم جوال صحيح.';
+    $cleanPhone = preg_replace('/[\s\-\(\)\+]/', '', $phoneNumber);
+    if (str_starts_with($cleanPhone, '00966')) {
+        $cleanPhone = substr($cleanPhone, 5);
+    } elseif (str_starts_with($cleanPhone, '966')) {
+        $cleanPhone = substr($cleanPhone, 3);
+    }
+    if (str_starts_with($cleanPhone, '05')) {
+        $cleanPhone = substr($cleanPhone, 1);
+    }
+
+    if (preg_match('/^5[0-9]{8}$/', $cleanPhone)) {
+        $phoneNumber = '+966' . $cleanPhone;
+    } else {
+        $errors['phone_number'] = 'يرجى إدخال رقم جوال سعودي صحيح (مثال: 05xxxxxxxx).';
     }
 }
 
@@ -90,7 +101,7 @@ if (empty($city)) {
 }
 
 // 5. التحقق من طريقة الدفع
-$allowedPayments = ['كاش (نقدًا)', 'تحويل بنكي'];
+$allowedPayments = ['كاش (نقدًا)', 'تحويل بنكي', 'كاش', 'بنك'];
 if (empty($paymentMethod)) {
     $errors['payment_method'] = 'يرجى اختيار طريقة الدفع.';
 } elseif (!in_array($paymentMethod, $allowedPayments, true)) {
@@ -233,7 +244,7 @@ $emailHtml = '
     <div class="container">
         <div class="header">
             <h1 class="brand-title">رسوخ العمرانية</h1>
-            <div class="badge">طلب تسجيل عميل جديد</div>
+            <div class="badge">طلب إتمام عملية الشراء</div>
         </div>
         
         <div class="content">
@@ -263,12 +274,16 @@ $emailHtml = '
                     <td class="data-value highlight">' . htmlspecialchars($paymentMethod, ENT_QUOTES, 'UTF-8') . '</td>
                 </tr>
                 <tr class="data-row">
-                    <td class="data-label">تاريخ ووقت الإرسال</td>
+                    <td class="data-label">تاريخ ووقت الطلب</td>
                     <td class="data-value">' . htmlspecialchars($submissionDate . ' | ' . $submissionTime, ENT_QUOTES, 'UTF-8') . '</td>
                 </tr>
                 <tr class="data-row">
-                    <td class="data-label">مصدر التسجيل</td>
-                    <td class="data-value">صفحة تسجيل بيانات العملاء</td>
+                    <td class="data-label">نوع الطلب</td>
+                    <td class="data-value highlight">إتمام عملية الشراء</td>
+                </tr>
+                <tr class="data-row">
+                    <td class="data-label">المصدر</td>
+                    <td class="data-value">صفحة إتمام عملية الشراء</td>
                 </tr>
             </table>
         </div>
