@@ -62,6 +62,7 @@ if (!empty($data['website_url_check'])) {
 // استخراج البيانات وتطهيرها
 $fullName = isset($data['full_name']) ? trim(strip_tags((string)$data['full_name'])) : '';
 $phoneNumber = isset($data['phone_number']) ? trim(strip_tags((string)$data['phone_number'])) : '';
+$city = isset($data['city']) ? trim(strip_tags((string)$data['city'])) : '';
 $paymentMethod = isset($data['payment_method']) ? trim(strip_tags((string)$data['payment_method'])) : '';
 
 $errors = [];
@@ -83,7 +84,12 @@ if (empty($phoneNumber)) {
     }
 }
 
-// 4. التحقق من طريقة الدفع
+// 4. التحقق من المدينة
+if (empty($city)) {
+    $errors['city'] = 'المدينة مطلوبة.';
+}
+
+// 5. التحقق من طريقة الدفع
 $allowedPayments = ['كاش (نقدًا)', 'تحويل بنكي'];
 if (empty($paymentMethod)) {
     $errors['payment_method'] = 'يرجى اختيار طريقة الدفع.';
@@ -247,6 +253,10 @@ $emailHtml = '
                             ' . htmlspecialchars($phoneNumber, ENT_QUOTES, 'UTF-8') . '
                         </a>
                     </td>
+                </tr>
+                <tr class="data-row">
+                    <td class="data-label">المدينة</td>
+                    <td class="data-value">' . htmlspecialchars($city, ENT_QUOTES, 'UTF-8') . '</td>
                 </tr>
                 <tr class="data-row">
                     <td class="data-label">طريقة الدفع</td>

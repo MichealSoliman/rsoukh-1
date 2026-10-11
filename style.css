@@ -96,39 +96,45 @@ body {
   width: 100%;
 }
 
-.brand-emblem {
+.brand-logo-container {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, rgba(200, 164, 93, 0.15), rgba(6, 22, 38, 0.8));
-  border: 1px solid var(--gold-border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(200, 164, 93, 0.1);
-  margin-bottom: 14px;
+  background: #ffffff;
+  padding: 14px 28px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--gold-primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(200, 164, 93, 0.2);
+  margin-bottom: 16px;
   transition: var(--transition);
 }
 
-.brand-emblem svg {
-  width: 32px;
-  height: 32px;
-  color: var(--gold-primary);
+.brand-logo-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55), 0 0 25px rgba(200, 164, 93, 0.35);
 }
 
-.brand-name {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--gold-primary);
-  letter-spacing: -0.3px;
-  margin-bottom: 6px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+.brand-logo-heading {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-logo-img {
+  height: 58px;
+  width: auto;
+  max-width: 250px;
+  object-fit: contain;
+  display: block;
 }
 
 .brand-subtitle {
   font-size: 0.95rem;
   color: var(--text-secondary);
-  font-weight: 400;
+  font-weight: 500;
   max-width: 380px;
   margin: 0 auto;
 }
@@ -320,7 +326,7 @@ body {
 
 /* General Status Alert (Success / Fail banner) */
 .status-alert {
-  display: none;
+  display: none !important;
   padding: 14px 16px;
   border-radius: var(--radius-md);
   margin-bottom: 20px;
@@ -329,10 +335,13 @@ body {
   animation: fadeIn 0.3s ease;
 }
 
-.status-alert.error {
-  display: flex;
+.status-alert.is-visible {
+  display: flex !important;
   align-items: center;
   gap: 10px;
+}
+
+.status-alert.error {
   background-color: var(--danger-bg);
   border: 1px solid var(--danger-border);
   color: #fca5a5;
@@ -516,8 +525,14 @@ body {
     border-radius: var(--radius-lg);
   }
 
-  .brand-name {
-    font-size: 1.5rem;
+  .brand-logo-container {
+    padding: 10px 20px;
+    margin-bottom: 12px;
+  }
+
+  .brand-logo-img {
+    height: 48px;
+    max-width: 210px;
   }
 
   .brand-subtitle {

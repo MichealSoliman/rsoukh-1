@@ -29,16 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // الحقول
   const fullNameInput = document.getElementById('fullName');
   const phoneInput = document.getElementById('phoneNumber');
+  const cityInput = document.getElementById('cityName');
   const paymentSelect = document.getElementById('paymentMethod');
   const honeypotInput = document.getElementById('website_url_check');
 
   // مجموعات الحقول ورسائل الخطأ
   const groupFullName = document.getElementById('groupFullName');
   const groupPhone = document.getElementById('groupPhone');
+  const groupCity = document.getElementById('groupCity');
   const groupPayment = document.getElementById('groupPayment');
 
   const fullNameError = document.getElementById('fullNameError');
   const phoneError = document.getElementById('phoneError');
+  const cityError = document.getElementById('cityError');
   const paymentError = document.getElementById('paymentError');
 
   // حالة الإرسال لمنع النقر المتكرر
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * إظهار رسالة خطأ لحقل معين
    */
   function showError(groupElem, errorElem, message) {
+    if (!groupElem || !errorElem) return;
     groupElem.classList.add('has-error');
     const textSpan = errorElem.querySelector('.error-text');
     if (textSpan) {
@@ -60,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * مسح رسالة الخطأ لحقل معين
    */
   function clearError(groupElem, errorElem) {
+    if (!groupElem || !errorElem) return;
     groupElem.classList.remove('has-error');
     errorElem.style.display = 'none';
   }
@@ -68,7 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
    * إخفاء التنبيه العام
    */
   function hideGeneralAlert() {
-    generalAlert.style.display = 'none';
+    generalAlert.classList.remove('is-visible');
+    generalAlert.style.setProperty('display', 'none', 'important');
   }
 
   /**
@@ -76,9 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function showGeneralAlert(message) {
     alertMessage.textContent = message || 'تعذر إرسال البيانات حاليًا، يرجى المحاولة مرة أخرى.';
-    generalAlert.style.display = 'flex';
+    generalAlert.classList.add('is-visible');
+    generalAlert.style.removeProperty('display');
     generalAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+
+  // التأكد من إخفاء التنبيه فور تحميل الصفحة
+  hideGeneralAlert();
 
   /**
    * التحقق من صحة الاسم الكامل
@@ -99,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /**
    * التحقق من صحة رقم الجوال
-   * يدعم أرقام الجوال السعودية بصيغها الشائعة مع الأرقام الدولية
    */
   function validatePhone() {
     const rawVal = phoneInput.value.trim();
@@ -108,12 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
 
-    // تنظيف الرقم من المسافات والشرطات والأقواس
     const cleanNumber = rawVal.replace(/[\s\-\(\)]/g, '');
-
-    // السعودية: 05xxxxxxxx أو +9665xxxxxxxx أو 009665xxxxxxxx أو 9665xxxxxxxx أو 5xxxxxxxx
     const saudiRegex = /^(05|5|\+9665|009665|9665)[0-9]{8}$/;
-    // النطاق الدولي العام
     const intlRegex = /^(\+?[0-9]{8,15})$/;
 
     if (saudiRegex.test(cleanNumber) || intlRegex.test(cleanNumber)) {
@@ -123,6 +128,23 @@ document.addEventListener('DOMContentLoaded', () => {
       showError(groupPhone, phoneError, 'يرجى إدخال رقم جوال صحيح.');
       return false;
     }
+  }
+
+  /**
+   * التحقق من صحة المدينة
+   */
+  function validateCity() {
+    const val = cityInput.value.trim();
+    if (!val) {
+      showError(groupCity, cityError, 'هذا الحقل مطلوب.');
+      return false;
+    }
+    if (val.length < 2) {
+      showError(groupCity, cityError, 'يرجى إدخال اسم مدينة صحيح.');
+      return false;
+    }
+    clearError(groupCity, cityError);
+    return true;
   }
 
   /**
@@ -138,29 +160,26 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
-  // تفاعل فوري لمسح الأخطاء أثناء الكتابة
+  // أحداث التفاعل في الوقت الفعلي
   fullNameInput.addEventListener('input', () => {
-    if (groupFullName.classList.contains('has-error')) {
-      validateFullName();
-    }
+    if (groupFullName.classList.contains('has-error')) validateFullName();
   });
-
   fullNameInput.addEventListener('blur', () => {
-    if (fullNameInput.value.trim() !== '') {
-      validateFullName();
-    }
+    if (fullNameInput.value.trim() !== '') validateFullName();
   });
 
   phoneInput.addEventListener('input', () => {
-    if (groupPhone.classList.contains('has-error')) {
-      validatePhone();
-    }
+    if (groupPhone.classList.contains('has-error')) validatePhone();
+  });
+  phoneInput.addEventListener('blur', () => {
+    if (phoneInput.value.trim() !== '') validatePhone();
   });
 
-  phoneInput.addEventListener('blur', () => {
-    if (phoneInput.value.trim() !== '') {
-      validatePhone();
-    }
+  cityInput.addEventListener('input', () => {
+    if (groupCity.classList.contains('has-error')) validateCity();
+  });
+  cityInput.addEventListener('blur', () => {
+    if (cityInput.value.trim() !== '') validateCity();
   });
 
   paymentSelect.addEventListener('change', () => {
@@ -177,14 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     hideGeneralAlert();
 
-    // التحقق من الحقول
+    // التحقق من كافة الحقول
     const isNameValid = validateFullName();
     const isPhoneValid = validatePhone();
+    const isCityValid = validateCity();
     const isPaymentValid = validatePayment();
 
-    if (!isNameValid || !isPhoneValid || !isPaymentValid) {
+    if (!isNameValid || !isPhoneValid || !isCityValid || !isPaymentValid) {
       if (!isNameValid) fullNameInput.focus();
       else if (!isPhoneValid) phoneInput.focus();
+      else if (!isCityValid) cityInput.focus();
       else if (!isPaymentValid) paymentSelect.focus();
       return;
     }
@@ -197,13 +218,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fullName = fullNameInput.value.trim();
     const phoneNumber = phoneInput.value.trim();
+    const cityName = cityInput.value.trim();
     const paymentMethod = paymentSelect.value;
 
     try {
       let isSuccess = false;
       let errorMsg = '';
 
-      // 1. إذا كان مفتاح Web3Forms متوفراً، نرسل عبره بتنسيق JSON لمنع تشويه الترميز
+      // 1. إذا كان مفتاح Web3Forms متوفراً
       if (CONFIG.web3formsKey) {
         const formattedDate = new Date().toLocaleString('ar-SA', {
           year: 'numeric',
@@ -217,13 +239,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const payload = {
           access_key: CONFIG.web3formsKey,
-          subject: 'تسجيل عميل جديد: ' + fullName + ' - ' + CONFIG.companyName,
+          subject: 'تسجيل عميل جديد: ' + fullName + ' (' + cityName + ') - ' + CONFIG.companyName,
           from_name: CONFIG.companyName,
           message: [
             'بيانات تسجيل العميل الجديد:',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
             '• اسم العميل: ' + fullName,
             '• رقم الجوال: ' + phoneNumber,
+            '• المدينة: ' + cityName,
             '• طريقة الدفع: ' + paymentMethod,
             '• اسم الشركة: ' + CONFIG.companyName,
             '• تاريخ ووقت الإرسال: ' + formattedDate,
@@ -252,10 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
           errorMsg = result.message || 'تعذر إرسال البيانات حاليًا، يرجى المحاولة مرة أخرى.';
         }
       } else {
-        // 2. استخدام معالج الخادم PHP كخيار بديل
+        // 2. استخدام معالج الخادم PHP كبديل
         const payload = {
           full_name: fullName,
           phone_number: phoneNumber,
+          city: cityName,
           payment_method: paymentMethod,
           website_url_check: honeypotInput ? honeypotInput.value : ''
         };
@@ -282,7 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
         form.style.display = 'none';
         successScreen.style.display = 'block';
         successScreen.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // تفريغ الحقول
         form.reset();
       } else {
         showGeneralAlert(errorMsg || 'تعذر إرسال البيانات حاليًا، يرجى المحاولة مرة أخرى.');
@@ -306,6 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hideGeneralAlert();
     clearError(groupFullName, fullNameError);
     clearError(groupPhone, phoneError);
+    clearError(groupCity, cityError);
     clearError(groupPayment, paymentError);
     successScreen.style.display = 'none';
     form.style.display = 'block';

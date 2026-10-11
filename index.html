@@ -21,20 +21,11 @@
     
     <!-- رأس الصفحة: الشعار واسم الشركة -->
     <header class="brand-header">
-      <div class="brand-emblem" aria-hidden="true">
-        <!-- أيقونة معمارية هندسية تعكس الرسوخ والعمران -->
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 21h18" />
-          <path d="M5 21V7l7-4 7 4v14" />
-          <path d="M9 10h1" />
-          <path d="M9 14h1" />
-          <path d="M9 18h1" />
-          <path d="M14 10h1" />
-          <path d="M14 14h1" />
-          <path d="M14 18h1" />
-        </svg>
+      <div class="brand-logo-container">
+        <h1 class="brand-logo-heading">
+          <img src="logo.png" alt="رسوخ العمرانية" class="brand-logo-img">
+        </h1>
       </div>
-      <h1 class="brand-name">رسوخ العمرانية</h1>
       <p class="brand-subtitle">نسعد بخدمتكم، يرجى تعبئة البيانات التالية.</p>
     </header>
 
@@ -58,7 +49,7 @@
         </div>
 
         <!-- رسالة التنبيه العامة عند حدوث خطأ في الإرسال -->
-        <div id="generalAlert" class="status-alert error" role="alert" aria-live="polite">
+        <div id="generalAlert" class="status-alert error" role="alert" aria-live="polite" style="display: none;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="8" x2="12" y2="12" />
@@ -141,7 +132,41 @@
           </div>
         </div>
 
-        <!-- الحقل الثالث: طريقة الدفع -->
+        <!-- الحقل الثالث: المدينة -->
+        <div class="form-group" id="groupCity">
+          <label for="cityName" class="form-label">
+            المدينة
+            <span class="required-mark" aria-hidden="true">*</span>
+          </label>
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="cityName" 
+              name="cityName" 
+              class="form-control" 
+              placeholder="أدخل اسم المدينة (مثل: الرياض، جدة، الدمام...)"
+              required 
+              autocomplete="address-level2"
+              aria-describedby="cityError"
+            >
+            <div class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+          </div>
+          <div id="cityError" class="error-message" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span class="error-text">هذا الحقل مطلوب.</span>
+          </div>
+        </div>
+
+        <!-- الحقل الرابع: طريقة الدفع -->
         <div class="form-group" id="groupPayment">
           <label for="paymentMethod" class="form-label">
             طريقة الدفع
