@@ -276,18 +276,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const payload = {
           access_key: CONFIG.web3formsKey,
-          subject: 'طلب تسجيل اهتمام: ' + fullName + ' (' + cityName + ') - ' + CONFIG.companyName,
-          from_name: CONFIG.companyName,
+          subject: 'بيانات العميل بالحمراء (مستشفي الملك فهد حي الحمراء) - ' + fullName,
+          from_name: 'رسوخ العمرانية - الحمراء',
+          'المشروع': 'بيانات العميل بالحمراء - مستشفي الملك فهد حي الحمراء',
           message: [
-            'بيانات طلب تسجيل الاهتمام:',
+            'بيانات العميل بالحمراء',
+            'مستشفي الملك فهد حي الحمراء',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
             '• اسم العميل: ' + fullName,
             '• رقم الجوال السعودي: ' + saudiPhoneInternational,
             '• المدينة: ' + cityName,
             '• طريقة الدفع: ' + paymentMethod,
+            '• الموقع / المشروع: مستشفي الملك فهد حي الحمراء',
             '• اسم الشركة: ' + CONFIG.companyName,
             '• تاريخ ووقت الطلب: ' + formattedDate,
-            '• نوع الطلب: تسجيل اهتمام',
+            '• نوع الطلب: تسجيل اهتمام (الحمراء)',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
           ].join('\n')
         };
@@ -318,7 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
           phone_number: saudiPhoneInternational,
           city: cityName,
           payment_method: paymentMethod,
-          request_type: 'تسجيل اهتمام',
+          project_source: 'بيانات العميل بالحمراء - مستشفي الملك فهد حي الحمراء',
+          request_type: 'تسجيل اهتمام (الحمراء)',
           website_url_check: honeypotInput ? honeypotInput.value : ''
         };
 
