@@ -1,12 +1,12 @@
 /**
- * رسوخ العمرانية - منطق صفحة إتمام عملية الشراء
- * Purchase Completion Form Handler
+ * رسوخ العمرانية - منطق صفحة تسجيل الاهتمام
+ * Register Interest Form Handler
  */
 
 // إعدادات خدمة الإرسال
 const CONFIG = {
-  // مفتاح Web3Forms الخاص ببريد: rsoukh.rs@gmail.com
-  web3formsKey: '113beeb3-a879-4915-b15e-03afe048cd3b',
+  // مفتاح Web3Forms الخاص ببريد: rswkhalmranyt@gmail.com
+  web3formsKey: '88af864b-908a-4bc9-b362-860d522e4a40',
   
   // اسم الشركة الافتراضي
   companyName: 'رسوخ العمرانية',
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const paymentError = document.getElementById('paymentError');
 
   // نص الزر الافتراضي
-  const defaultBtnText = 'إرسال بيانات إتمام الشراء';
+  const defaultBtnText = 'تسجيل اهتمامك';
 
   // حالة الإرسال لمنع النقر المتكرر
   let isSubmitting = false;
@@ -276,10 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const payload = {
           access_key: CONFIG.web3formsKey,
-          subject: 'طلب إتمام عملية الشراء: ' + fullName + ' (' + cityName + ') - ' + CONFIG.companyName,
+          subject: 'طلب تسجيل اهتمام: ' + fullName + ' (' + cityName + ') - ' + CONFIG.companyName,
           from_name: CONFIG.companyName,
           message: [
-            'بيانات طلب إتمام عملية الشراء:',
+            'بيانات طلب تسجيل الاهتمام:',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
             '• اسم العميل: ' + fullName,
             '• رقم الجوال السعودي: ' + saudiPhoneInternational,
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
             '• طريقة الدفع: ' + paymentMethod,
             '• اسم الشركة: ' + CONFIG.companyName,
             '• تاريخ ووقت الطلب: ' + formattedDate,
-            '• نوع الطلب: إتمام عملية الشراء',
+            '• نوع الطلب: تسجيل اهتمام',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
           ].join('\n')
         };
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
           phone_number: saudiPhoneInternational,
           city: cityName,
           payment_method: paymentMethod,
-          request_type: 'إتمام عملية الشراء',
+          request_type: 'تسجيل اهتمام',
           website_url_check: honeypotInput ? honeypotInput.value : ''
         };
 

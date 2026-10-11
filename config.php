@@ -12,8 +12,8 @@ return [
      * أدخل البريد الإلكتروني الذي ترغب في استقبال طلبات التسجيل عليه.
      * مثال: 'info@rosookh.com' أو 'yourname@gmail.com'
      */
-    'recipient_email' => 'rsoukh.rs@gmail.com',
-    'web3forms_key'   => '113beeb3-a879-4915-b15e-03afe048cd3b',
+    'recipient_email' => 'rswkhalmranyt@gmail.com',
+    'web3forms_key'   => '88af864b-908a-4bc9-b362-860d522e4a40',
 
     /**
      * 2. طريقة الإرسال:
@@ -39,6 +39,6 @@ return [
      */
     'from_name'     => 'رسوخ العمرانية - نظام تسجيل العملاء',
     'from_email'    => '', // اتركه فارغاً ليتم استخدام noreply@ اسم النطاق تلقائياً، أو حدد بريد نطاقك
-    'email_subject' => 'طلب إتمام عملية الشراء - رسوخ العمرانية',
+    'email_subject' => 'طلب تسجيل اهتمام - رسوخ العمرانية',
     'timezone'      => 'Asia/Riyadh',
 ];

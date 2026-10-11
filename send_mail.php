@@ -244,7 +244,7 @@ $emailHtml = '
     <div class="container">
         <div class="header">
             <h1 class="brand-title">رسوخ العمرانية</h1>
-            <div class="badge">طلب إتمام عملية الشراء</div>
+            <div class="badge">طلب تسجيل اهتمام</div>
         </div>
         
         <div class="content">
@@ -279,11 +279,11 @@ $emailHtml = '
                 </tr>
                 <tr class="data-row">
                     <td class="data-label">نوع الطلب</td>
-                    <td class="data-value highlight">إتمام عملية الشراء</td>
+                    <td class="data-value highlight">تسجيل اهتمام</td>
                 </tr>
                 <tr class="data-row">
                     <td class="data-label">المصدر</td>
-                    <td class="data-value">صفحة إتمام عملية الشراء</td>
+                    <td class="data-value">صفحة تسجيل الاهتمام</td>
                 </tr>
             </table>
         </div>
